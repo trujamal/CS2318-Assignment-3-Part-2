@@ -1,0 +1,259 @@
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 4
+End adding ints? (y or Y = yes, others = no) y
+
+beginning a1: 4  
+          a2: 
+          a3: 
+          a4: 4  
+chkPointA a1: 
+          a2: 4  
+          a3: 
+          a4: 4  
+processed a1: 
+          a2: 4  
+          a3: 
+          a4: 4  
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 5
+End adding ints? (y or Y = yes, others = no) y
+
+beginning a1: 5  
+          a2: 
+          a3: 5  
+          a4: 
+chkPointA a1: 5  
+          a2: 
+          a3: 5  
+          a4: 
+processed a1: 5  
+          a2: 
+          a3: 5  
+          a4: 
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 4
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #2: 5
+End adding ints? (y or Y = yes, others = no) y
+
+beginning a1: 4  
+          a2: 5  
+          a3: 5  
+          a4: 4  
+chkPointA a1: 5  
+          a2: 4  
+          a3: 5  
+          a4: 4  
+processed a1: 5  
+          a2: 4  
+          a3: 
+          a4: 4  5  
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #2: 3
+End adding ints? (y or Y = yes, others = no) y
+
+beginning a1: 5  
+          a2: 3  
+          a3: 5  3  
+          a4: 
+chkPointA a1: 3  5  
+          a2: 
+          a3: 5  3  
+          a4: 
+processed a1: 3  5  
+          a2: 
+          a3: 3  5  
+          a4: 
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 8
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #2: 6
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #3: 3
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #4: 4
+End adding ints? (y or Y = yes, others = no) y
+
+beginning a1: 8  3  
+          a2: 6  4  
+          a3: 3  
+          a4: 6  4  8  
+chkPointA a1: 3  
+          a2: 4  6  8  
+          a3: 3  
+          a4: 6  4  8  
+processed a1: 3  
+          a2: 4  6  8  
+          a3: 3  4  6  8  
+          a4: 
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 0
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #2: 3
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #3: 4
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #4: 6
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #5: 7
+End adding ints? (y or Y = yes, others = no) y
+
+beginning a1: 0  4  7  
+          a2: 3  6  
+          a3: 3  7  
+          a4: 0  6  4  
+chkPointA a1: 3  7  
+          a2: 0  4  6  
+          a3: 3  7  
+          a4: 0  6  4  
+processed a1: 3  7  
+          a2: 0  4  6  
+          a3: 
+          a4: 0  3  4  6  7  
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 4
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #2: 4
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #3: 4
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #4: 4
+End adding ints? (y or Y = yes, others = no) y
+
+beginning a1: 4  4  
+          a2: 4  4  
+          a3: 
+          a4: 4  4  4  4  
+chkPointA a1: 
+          a2: 4  4  4  4  
+          a3: 
+          a4: 4  4  4  4  
+processed a1: 
+          a2: 4  4  4  4  
+          a3: 
+          a4: 4  4  4  4  
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #2: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #3: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #4: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #5: 5
+End adding ints? (y or Y = yes, others = no) y
+
+beginning a1: 5  5  5  
+          a2: 5  5  
+          a3: 5  5  5  5  5  
+          a4: 
+chkPointA a1: 5  5  5  5  5  
+          a2: 
+          a3: 5  5  5  5  5  
+          a4: 
+processed a1: 5  5  5  5  5  
+          a2: 
+          a3: 5  5  5  5  5  
+          a4: 
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #2: 2
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #3: 9
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #4: 0
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #5: 7
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #6: 1
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #7: 3
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #8: 6
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #9: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #10: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #11: 8
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #12: 2
+Max of 12 ints entered...
+
+beginning a1: 5  9  7  3  5  8  
+          a2: 2  0  1  6  5  2  
+          a3: 5  9  7  3  5  1  5  
+          a4: 2  0  8  6  2  
+chkPointA a1: 1  3  5  5  5  7  9  
+          a2: 0  2  2  6  8  
+          a3: 5  9  7  3  5  1  5  
+          a4: 2  0  8  6  2  
+processed a1: 1  3  5  5  5  7  9  
+          a2: 0  2  2  6  8  
+          a3: 
+          a4: 0  1  2  2  3  5  5  5  6  7  8  9  
+
+Do another case? (n or N = no, others = yes) y
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #1: 5
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #2: 2
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #3: 9
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #4: 2
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #5: 7
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #6: 1
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #7: 3
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #8: 6
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #9: 4
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #10: 4
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #11: 8
+End adding ints? (y or Y = yes, others = no) n
+Enter integer #12: 2
+Max of 12 ints entered...
+
+beginning a1: 5  9  7  3  4  8  
+          a2: 2  2  1  6  4  2  
+          a3: 5  9  7  3  1  
+          a4: 2  2  4  6  4  2  8  
+chkPointA a1: 1  3  5  7  9  
+          a2: 2  2  2  4  4  6  8  
+          a3: 5  9  7  3  1  
+          a4: 2  2  4  6  4  2  8  
+processed a1: 1  3  5  7  9  
+          a2: 2  2  2  4  4  6  8  
+          a3: 1  2  2  2  3  4  4  5  6  7  8  9  
+          a4: 
+
+Do another case? (n or N = no, others = yes) n
+================================
+bye...
+================================
