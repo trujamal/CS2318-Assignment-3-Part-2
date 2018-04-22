@@ -67,13 +67,16 @@ endDataInitM:
 #                 //do
 begDW_m:#//         {
 #                      PopulateArray12(12, a1, a2, &used1, &used2);
-			####################(6)####################
+
 			li $a0, 12
 			addi $a1, $sp, 232
 			addi $a2, $sp, 280
 			addi $a3, $sp, 228
 			addi $t0, $sp, 224
-			sw $t0, 16($sp)
+			sw $t0, 16($sp) # Can't be lw due to going into overflow
+			# Section Correct Above
+			####################(6)####################
+
 			jal PopulateArray12
 #                      cout << endl;
 			li $a0, '\n'
@@ -99,8 +102,7 @@ begDW_m:#//         {
 			blez $t0, else1_m
 begI1_m:#//            {
 #     minInt = PopulateArray34(a1, a2, a3, a4, used1, used2, &used3, &used4);
-
-			####################(12)####################
+####################(12)####################
 
 			#a1-a4
 			addi $a0, $sp, 232 # Register a1
@@ -118,8 +120,9 @@ begI1_m:#//            {
 			addi $t0, $sp, 216 #used4 unwrapped
 			sw $t0, 28($sp) #arg8
 
-			move $s0, $v0 # Moving
+			# move $s0, $v0 # Moving
 			jal PopulateArray34
+
 			move $s0, $v0
 #                      goto endI1_m;
 			j endI1_m
@@ -159,10 +162,10 @@ begI2_m:#//            {
 
 			#$used1, $used2
 			addi $t0, $sp, 228 # used1
-			sw $t0, 16($sp) # argument 5
+			lw $t0, 16($sp) # argument 5, # Using lw for &
 
 			addi $t0, $sp, 224 # used2
-			sw $t0, 20($sp) # argument 6
+			lw $t0, 20($sp) # argument 6
 
 			#used3, used4
 			addi $t0, $sp, 220 # used3 unwrapped
@@ -215,10 +218,10 @@ begI2_m:#//            {
 
 			#&used3, &used4
 			addi $t0, $sp, 220 # used3 unwrapped
-			sw $t0, 28($sp) # argument 8
+			lw $t0, 28($sp) # argument 8, Possibly use lw instead of sw
 
 			addi $t0, $sp, 216 #used4 unwrapped
-			sw $t0, 32($sp) # argument 9
+			lw $t0, 32($sp) # argument 9, Possibly use lw instead of sw
 
 			jal ProcArraysB
 endI2_m:#//            }
@@ -293,18 +296,6 @@ xitDW_m:
 #}
 			li $v0, 10
 			syscall
-
-
-
-
-
-
-
-
-
-
-
-
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
