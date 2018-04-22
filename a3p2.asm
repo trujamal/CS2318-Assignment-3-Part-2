@@ -67,7 +67,6 @@ endDataInitM:
 #                 //do
 begDW_m:#//         {
 #                      PopulateArray12(12, a1, a2, &used1, &used2);
-
 			li $a0, 12
 			addi $a1, $sp, 232
 			addi $a2, $sp, 280
