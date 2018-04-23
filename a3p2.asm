@@ -1030,72 +1030,76 @@ ProcArraysB:
 		sw $fp, 24($sp)
 		addiu $fp, $sp, 32
 
-		sw $a0, 0($fp)
-		sw $a1, 4($fp)
-		sw $a2, 8($fp)
-		sw $a3, 12($fp)
+		sw $a0, 0($fp)				# minInt as received saved in caller's frame
+		sw $a1, 4($fp)				# a1 as received saved in caller's frame
+		sw $a2, 8($fp)				# a2 as received saved in caller's frame
+		sw $a3, 12($fp)				# a3 as received saved in caller's frame
 			# BODY:
 #                   *used3Ptr = 0;
-		lw $t0, 28($fp)
+
+		lw $t0, 28($fp) #used3Ptr = t0 @ 28
 		sw $0, 0($t0)
 #                   *used4Ptr = 0;
-		lw $t0, 32($fp)
+
+		lw $t0, 32($fp)  #used4Ptr = t0 @ 32
 		sw $0, 0($t0)
 #                 //if ( (minInt & 1) != 0)
 #                   if ( (minInt & 1) == 0) goto else_PAB;
 		andi $t0, $a0, 1
 		beqz $t0, else_PAB
+
 begI_PAB:#//        {
-#                      MergeCopy12(a3, a1, a2, used1, used2);
-		lw $a0, 12($fp)
-		lw $a1, 4($fp)
-		lw $a2, 8($fp)
-		lw $a3, 20($fp)
-		lw $t0, 24($fp)
+		#                      MergeCopy12(a3, a1, a2, used1, used2);
+		lw $a0, 12($fp) #a3 in argument 1
+		lw $a1, 4($fp)  #a1 in argument 2
+		lw $a2, 8($fp)  #a2 in argument 3
+		lw $a3, 20($fp) #used1 in argument 4
+		lw $t0, 24($fp) #used2 in argument position 5 using fp
 		sw $t0, 16($sp)
 
 		jal MergeCopy12
 
-
-
 #                      *used3Ptr = used1 + used2;
-		lw $t5, 28($fp)
-
-		lw $t0, 20($fp)
-		lw $v1, 24($fp)
-		add $t0, $t0, $v1
-
-		sw $t0, 0($t5)
+		lw $t5, 28($fp)  # Location of used3Ptr
+		lw $t0, 20($fp) # location of used1
+		lw $v1, 24($fp) # location of used2
+		add $t0, $t0, $v1 # adds the contents of used1 + used2
+		sw $t0, 0($t5) # Setting them equal to each other
 #                   goto endI_PAB;
 		j endI_PAB
 #//                 }
 else_PAB:#//        else
 #//                 {
 #                      MergeCopy12(a4, a1, a2, used1, used2);
-		lw $a0, 16($fp)
-		lw $a1, 4($fp)
-		lw $a2, 8($fp)
-		lw $a3, 20($fp)
+		lw $a0, 16($fp) # Argument 1
+		lw $a1, 4($fp) # Argument 2
+		lw $a2, 8($fp) # Argument 3
+		lw $a3, 20($fp) # Argument 4
 		lw $t0, 24($fp)
-		sw $t0, 16($sp)
+		sw $t0, 16($sp) # Argument 5 position
 
 		jal MergeCopy12
 
 #                      *used4Ptr = used1 + used2;
-		lw $t1, 32($fp)
-		lw $t0, 20($fp)
-		lw $v1, 24($fp)
-		add $t0, $t0, $v1
+		lw $t1, 32($fp) #used4Ptr
+		lw $t0, 20($fp) #used1
+		lw $v1, 24($fp) #used2
 
-		sw $t0, 0($t1)
+		#			sw $t4, 24($sp)
+		#			sll $t4, $t4, 2
+		#			add $t4, $t4, $t1
+
+		add $t0, $t0, $v1 #adding registers together
+		sw $t0, 0($t1) # place in the used4Ptr location
 
 endI_PAB:#//        }
+
+			# EPILOG:
 		lw $a0, 0($fp)
 		lw $a1, 4($fp)
 		lw $a2, 8($fp)
 		lw $a3, 12($fp)
 
-			# EPILOG:
 		lw $ra, 28($sp)
 		lw $fp, 24($sp)
 		addiu $sp, $sp, 32
