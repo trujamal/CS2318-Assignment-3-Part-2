@@ -67,12 +67,13 @@ endDataInitM:
 #                 //do
 begDW_m:#//         {
 #                      PopulateArray12(12, a1, a2, &used1, &used2);
+
 			li $a0, 12
 			addi $a1, $sp, 232
 			addi $a2, $sp, 280
 			addi $a3, $sp, 228
 			addi $t0, $sp, 224
-			sw $t0, 16($sp) # Can't be lw due to going into overflow
+			sw $t0, 16($sp) # Can't be lw due to going into overflow Thinking
 			# Section Correct Above
 			####################(6)####################
 
@@ -110,16 +111,19 @@ begI1_m:#//            {
 			addi $a3, $sp, 376 # Register a4
 
 			#used1, used2
-			addi $t1, $sp, 228 # Register used1
-			addi $t2, $sp, 224 # Register used2
+			lw $t0, 228($sp) # Register used1
+			sw $t0, 16($sp) # arg5
+
+			lw $t0, 224($sp) # Register used2
+			sw $t0, 20($sp) # arg6
 
 			#&used3, &used4
-			addi $t0, $sp, 220 # used3 unwrapped
+			addi $t0, $sp, 220 # Register used3
 			sw $t0, 24($sp) # arg7
-			addi $t0, $sp, 216 #used4 unwrapped
+			addi $t0, $sp, 216 # Register used4
 			sw $t0, 28($sp) #arg8
 
-			# move $s0, $v0 # Moving
+#End
 			jal PopulateArray34
 
 			move $s0, $v0
@@ -152,7 +156,6 @@ endI1_m:#//            }
 			blez $t0, endI2_m
 begI2_m:#//            {
 #                         ProcArraysA(a1, a2, a3, a4, &used1, &used2, used3, used4);
-			####################(12)####################
 				#a1-a4
 			addi $a0, $sp, 232 # Register a1
 			addi $a1, $sp, 280 # Register a2
@@ -161,17 +164,21 @@ begI2_m:#//            {
 
 			#$used1, $used2
 			addi $t0, $sp, 228 # used1
-			lw $t0, 16($sp) # argument 5, # Using lw for &
+			sw $t0, 16($sp) # argument 5, # Using addi for &
 
 			addi $t0, $sp, 224 # used2
-			lw $t0, 20($sp) # argument 6
+			sw $t0, 20($sp) # argument 6 # Using addi for &
+
+			# Possibly needing to lw -> sw
 
 			#used3, used4
-			addi $t0, $sp, 220 # used3 unwrapped
+			lw $t0, 220($sp) # used3 unwrapped
 			sw $t0, 24($sp) # argument 7
 
-			addi $t0, $sp, 216 #used4 unwrapped
+			lw $t0, 216($sp) #used4 unwrapped
 			sw $t0, 28($sp) # argument 8
+
+			####################(12)####################
 
 			jal ProcArraysA
 #                         ShowArrayLabeled(a1, used1, cpaA1Str);
@@ -208,20 +215,20 @@ begI2_m:#//            {
 			addi $t0, $sp, 376 # Register a4
 			sw $t0, 16($sp) # argument 5
 
-			#used1, used2
-			addi $t0, $sp, 228 # used1
+			#used1, used2 <- no & = lw
+			lw $t0, 228($sp) # used1
 			sw $t0, 20($sp) # argument 6
 
-			addi $t0, $sp, 224 # used2
+			lw $t0, 224($sp) # used2
 			sw $t0, 24($sp) # argument 7
 
-			#&used3, &used4
+			#&used3, &used4 <- Whenever & use addi
 			addi $t0, $sp, 220 # used3 unwrapped
 			lw $t0, 28($sp) # argument 8, Possibly use lw instead of sw
 
 			addi $t0, $sp, 216 #used4 unwrapped
 			lw $t0, 32($sp) # argument 9, Possibly use lw instead of sw
-
+#End
 			jal ProcArraysB
 endI2_m:#//            }
 #                      ShowArrayLabeled(a1, used1, proA1Str);
@@ -889,6 +896,7 @@ ProcArraysA:
 			sw $a1, 4($fp)				# a2 as received saved in caller's frame
 			sw $a2, 8($fp)				# a3 as received saved in caller's frame
 			sw $a3, 12($fp)				# a4 as received saved in caller's frame
+
 			# BODY:
 #                   *used1Ptr = 0;
 			lw $t0, 16($fp)
@@ -899,19 +907,29 @@ ProcArraysA:
 #                   int* hopPtr = a3;
 			move $t1, $a2 # Possilby correct
 #                   int* endPtr = a3 + used3;
-			sw $t9, 24($fp) # sp vs fp
+
+			# sw $t9, 24($fp) # sp vs fp
+			lw $t9, 24(fp)
 			sll $t9, $t9, 2
-			add $t9, $t9, $t1
+			add $t9, $t9, $a2 # Adding the registers together
 
 #                   goto WTest1_PAA;
 			j WTest1_PAA
 #                 //while (hopPtr < endPtr)
 begW1_PAA:#       //{
 #                      InsertSortedND(a1, used1Ptr, *hopPtr);
-			lw $a0, 232($sp) # a1
-			lw $t0, 16($fp) #used2ptr
-			lw $s1, 0($t1) # Can be lw or sw
+			# @todo1
+			sw $t1, 16($sp) # Moving in temp mem
+			sw $t9, 20($sp) # Moving in temp mem
+
+			lw $a0, 0($fp) # a1 as argument 1
+			lw $a1, 16($fp) # used1ptr as argument 2
+			lw $a2, 0($t1)  # Can be lw or sw
+
 			jal InsertSortedND
+
+			lw $t1, 16($sp) # Reloading information into strd
+			lw $t9, 20($sp) # Reloading information into strd
 #                      ++hopPtr;
 			addi $t1, $t1, 4
 #//                 }
@@ -919,20 +937,28 @@ WTest1_PAA:
 #                   if (hopPtr < endPtr) goto begW1_PAA;
 			blt $t1, $t9, begW1_PAA
 #                   hopPtr = a4;
-			move $t1, $a3
+			lw $t1, 12($fp)
 #                   endPtr = a4 + used4;
-			sw $t9, 28($fp) # sp vs fp
-			sll $t9, $t9, 2
-			add $t9, $t9, $t1
+			lw $t0, 28($fp) # sp vs fp
+			sll $t0, $t0, 2
+			add $t9, $t0, $t1
 #                   goto WTest2_PAA;
 			j WTest2_PAA
 #                 //while (hopPtr < endPtr)
 begW2_PAA:#       //{
 #                      InsertSortedND(a2, used2Ptr, *hopPtr);
-			lw $a1, 280($sp) # a2
-			lw $t0, 20($fp) #used2ptr
-			lw $s1, 0($t1) # Can be lw or sw
+
+			sw $t1, 16($sp) # Putting values in temp mem
+			sw $t9, 20($sp) # Putting values in temp mem
+
+			lw $a0, 4($fp) # Loading a2 into temp memory
+			lw $a1, 20($fp) # used2ptr
+			lw $a2, 0($t1) # Can be lw or sw
+
 			jal InsertSortedND
+
+			lw $t1, 16($sp)
+			lw $t9, 20($sp)
 #                      ++hopPtr;
 			addi $t1, $t1, 4
 #//                 }
@@ -1000,30 +1026,28 @@ ProcArraysB:
 			sw $a1, 4($fp)				# a1 as received saved in caller's frame
 			sw $a2, 8($fp)				# a2 as received saved in caller's frame
 			sw $a3, 12($fp)				# a3 as received saved in caller's frame
-			sw $t0, 16($fp)				# a4 as received saved in caller's frame
 
-			sw $t1, 20($fp)				# used1 as received saved in caller's frame
-			sw $t2, 24($fp)				# used2 as received saved in caller's frame
-			sw $t3, 28($fp)				# used3Ptr as received saved in caller's frame
-			sw $t4, 32($fp)				# used4Ptr as received saved in caller's frame
 			# BODY:
 #                   *used3Ptr = 0;
-			lw $t3, 28($sp)
-			sw $0, 0($t3)
+			lw $t0, 28($sp) #used3Ptr = t0
+			sw $0, 0($t0)
 #                   *used4Ptr = 0;
-			lw $t4, 32($sp)
-			sw $0, 0($t4)
+			lw $t1, 32($sp) #used4Ptr = t1
+			sw $0, 0($t1)
 #                 //if ( (minInt & 1) != 0)
 #                   if ( (minInt & 1) == 0) goto else_PAB;
 			andi $a0, $a0, 1
 			beqz $t0, else_PAB
+
 begI_PAB:#//        {
 #                      MergeCopy12(a3, a1, a2, used1, used2);
 			lw $a3, 12($fp)
 			lw $a1, 4($fp)
 			lw $a2, 8($fp)
+
 			lw $t1, 20($fp)
 			lw $t2, 24($fp)
+
 			jal MergeCopy12
 #                      *used3Ptr = used1 + used2;
 			sw $t3, 24($sp)
