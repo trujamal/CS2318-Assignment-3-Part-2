@@ -1,8 +1,8 @@
 ################################################################################
-# Name:    <your name>
-# Class:   CS2318-26?, Spring 2018
+# Name:    <Jamal Rasool>
+# Class:   CS2318-260, Spring 2018
 # Subject: Assignment 3 Part 2
-# Date:    <turn-in date>
+# Date:    <4/25/18>
 ################################################################################
 #void PopulateArray12(int cap, int a1[], int a2[], int* used1Ptr, int* used2Ptr);
 #int  PopulateArray34(int a1[], int a2[], int a3[], int a4[], int used1, int used2, int* used3Ptr, int* used4Ptr);
@@ -224,10 +224,10 @@ begI2_m:#//            {
 
 			#&used3, &used4 <- Whenever & use addi
 			addi $t0, $sp, 220 # used3 unwrapped
-			lw $t0, 28($sp) # argument 8, Possibly use lw instead of sw
+			sw $t0, 28($sp) # argument 8, Possibly use lw instead of sw
 
 			addi $t0, $sp, 216 #used4 unwrapped
-			lw $t0, 32($sp) # argument 9, Possibly use lw instead of sw
+			sw $t0, 32($sp) # argument 9, Possibly use lw instead of sw
 #End
 			jal ProcArraysB
 endI2_m:#//            }
@@ -887,88 +887,96 @@ ProcArraysA:
 			####################(46)####################
 
 			# PROLOG:
-			addiu $sp ,$sp, -32
-			sw $ra, 28($sp)
-			sw $fp, 24($sp)
-			addiu $fp, $sp, 32
+		addiu $sp, $sp, -32
+		sw $ra, 28($sp)
+		sw $fp, 24($sp)
+		addiu $fp, $sp, 32
 
-			sw $a0, 0($fp)				# a1 as received saved in caller's frame
-			sw $a1, 4($fp)				# a2 as received saved in caller's frame
-			sw $a2, 8($fp)				# a3 as received saved in caller's frame
-			sw $a3, 12($fp)				# a4 as received saved in caller's frame
+		sw $a0, 0($fp)				# a1 as received saved in caller's frame
+		sw $a1, 4($fp)				# a2 as received saved in caller's frame
+		sw $a2, 8($fp)				# a3 as received saved in caller's frame
+		sw $a3, 12($fp)				# a4 as received saved in caller's frame
 
 			# BODY:
 #                   *used1Ptr = 0;
-			lw $t0, 16($fp)
-			sw $0, 0($t0)
-#                   *used2Ptr = 0;
-			lw $t0, 20($fp) # sp vs fp
-			sw $0, 0($t0)
-#                   int* hopPtr = a3;
-			move $t1, $a2 # Possilby correct
-#                   int* endPtr = a3 + used3;
+		lw $t0, 16($fp)
+		sw $0, 0($t0)
 
-			# sw $t9, 24($fp) # sp vs fp
-			lw $t9, 24($fp)
-			sll $t9, $t9, 2
-			add $t9, $t9, $a2 # Adding the registers together
+#                   *used2Ptr = 0;
+
+		lw $t0, 20($fp) # sp vs fp
+		sw $0, 0($t0)
+
+#                   int* hopPtr = a3;
+		move $t1, $a2 # Possilby correct
+#                   int* endPtr = a3 + used3;
+		# sw $t9, 24($fp) # sp vs fp
+		lw $t9, 24($fp)
+		sll $t9, $t9, 2
+		add $t9, $t9, $a2 # Adding the registers together
 
 #                   goto WTest1_PAA;
-			j WTest1_PAA
+		j WTest1_PAA
 #                 //while (hopPtr < endPtr)
 begW1_PAA:#       //{
-#                      InsertSortedND(a1, used1Ptr, *hopPtr);
-			# @todo1
-			sw $t1, 16($sp) # Moving in temp mem
-			sw $t9, 20($sp) # Moving in temp mem
+#               InsertSortedND(a1, used1Ptr, *hopPtr);
+		sw $t1, 16($sp) # Moving in temp mem
+		sw $t9, 20($sp) # Moving in temp mem
 
-			lw $a0, 0($fp) # a1 as argument 1
-			lw $a1, 16($fp) # used1ptr as argument 2
-			lw $a2, 0($t1)  # Can be lw or sw
+		lw $a0, 0($fp) # a1 as argument 1
+		lw $a1, 16($fp) # used1ptr as argument 2
+		lw $a2, 0($t1)  # Can be lw or sw
 
-			jal InsertSortedND
+		jal InsertSortedND
 
-			lw $t1, 16($sp) # Reloading information into strd
-			lw $t9, 20($sp) # Reloading information into strd
+		lw $t1, 16($sp) # Reloading information into strd
+		lw $t9, 20($sp) # Reloading information into strd
+
 #                      ++hopPtr;
-			addi $t1, $t1, 4
+		addi $t1, $t1, 4
 #//                 }
 WTest1_PAA:
 #                   if (hopPtr < endPtr) goto begW1_PAA;
-			blt $t1, $t9, begW1_PAA
+		blt $t1, $t9, begW1_PAA
+
 #                   hopPtr = a4;
-			lw $t1, 12($fp)
+		lw $t1, 12($fp)
 #                   endPtr = a4 + used4;
-			lw $t0, 28($fp) # sp vs fp
-			sll $t0, $t0, 2
-			add $t9, $t0, $t1
+		lw $t0, 28($fp) # sp vs fp
+		sll $t0, $t0, 2
+		add $t9, $t1, $t0
 #                   goto WTest2_PAA;
-			j WTest2_PAA
+		j WTest2_PAA
 #                 //while (hopPtr < endPtr)
 begW2_PAA:#       //{
 #                      InsertSortedND(a2, used2Ptr, *hopPtr);
+		sw $t1, 16($sp) # Putting values in temp mem
+		sw $t9, 20($sp) # Putting values in temp mem
 
-			sw $t1, 16($sp) # Putting values in temp mem
-			sw $t9, 20($sp) # Putting values in temp mem
+		lw $a0, 4($fp) # Loading a2 into temp memory
+		lw $a1, 20($fp) # used2ptr
+		lw $a2, 0($t1) # Can be lw or sw
 
-			lw $a0, 4($fp) # Loading a2 into temp memory
-			lw $a1, 20($fp) # used2ptr
-			lw $a2, 0($t1) # Can be lw or sw
 
-			jal InsertSortedND
+		jal InsertSortedND
 
-			lw $t1, 16($sp)
-			lw $t9, 20($sp)
+		lw $t1, 16($sp) # Restoring information
+		lw $t9, 20($sp) # Restoring information
+
 #                      ++hopPtr;
-			addi $t1, $t1, 4
+		addi $t1, $t1, 4
 #//                 }
 WTest2_PAA:
 #                   if (hopPtr < endPtr) goto begW2_PAA;
-			blt $t1, $t9, begW2_PAA
+
+
+		blt $t1, $t9, begW2_PAA
+
 			# EPILOG:
-			sw $fp, 24($sp)
-			sw $ra, 28($sp)
-			addiu $fp, $sp, 32
+		lw $fp, 24($sp)
+		lw $ra, 28($sp)
+		addiu $sp, $sp, 32
+
 #}
 #########################################
 # deliberate clobbering of caller-saved
@@ -1017,80 +1025,80 @@ ProcArraysB:
 			####################(46)####################
 
 			# PROLOG:
-			addiu $sp ,$sp, -32
-			sw $ra, 28($sp)
-			sw $fp, 24($sp)
-			addiu $fp, $sp, 32
+		addiu $sp, $sp, -32
+		sw $ra, 28($sp)
+		sw $fp, 24($sp)
+		addiu $fp, $sp, 32
 
-			sw $a0, 0($fp)				# minInt as received saved in caller's frame
-			sw $a1, 4($fp)				# a1 as received saved in caller's frame
-			sw $a2, 8($fp)				# a2 as received saved in caller's frame
-			sw $a3, 12($fp)				# a3 as received saved in caller's frame
-
+		sw $a0, 0($fp)
+		sw $a1, 4($fp)
+		sw $a2, 8($fp)
+		sw $a3, 12($fp)
 			# BODY:
 #                   *used3Ptr = 0;
-			lw $t0, 28($sp) #used3Ptr = t0
-			sw $0, 0($t0)
+		lw $t0, 28($fp)
+		sw $0, 0($t0)
 #                   *used4Ptr = 0;
-			lw $t1, 32($sp) #used4Ptr = t1
-			sw $0, 0($t1)
+		lw $t0, 32($fp)
+		sw $0, 0($t0)
 #                 //if ( (minInt & 1) != 0)
 #                   if ( (minInt & 1) == 0) goto else_PAB;
-			andi $a0, $a0, 1
-			beqz $t0, else_PAB
-
+		andi $t0, $a0, 1
+		beqz $t0, else_PAB
 begI_PAB:#//        {
 #                      MergeCopy12(a3, a1, a2, used1, used2);
-			lw $a0, 12($fp) #a3 in argument 1
-			lw $a1, 4($fp)  #a1 in argument 2
-			lw $a2, 8($fp)  #a2 in argument 3
-			lw $a3, 20($fp) #used1 in argument 4
-			lw $t0, 24($fp) #used2 in argument position 5 using fp
-			sw $t0, 16($fp)
+		lw $a0, 12($fp)
+		lw $a1, 4($fp)
+		lw $a2, 8($fp)
+		lw $a3, 20($fp)
+		lw $t0, 24($fp)
+		sw $t0, 16($sp)
 
-			jal MergeCopy12
+		jal MergeCopy12
+
+
+
 #                      *used3Ptr = used1 + used2;
+		lw $t5, 28($fp)
 
-			lw $t4, 28($fp) # Location of used3Ptr
-			lw $t0, 20($fp) # location of used1
-			lw $v1, 24($sp) # location of used2
-			add $t0, $t0, $v1 # adds the contents of used1 + used2
-			sw $t0, 0($t4) # Setting them equal to each other
+		lw $t0, 20($fp)
+		lw $v1, 24($fp)
+		add $t0, $t0, $v1
 
+		sw $t0, 0($t5)
 #                   goto endI_PAB;
-			j endI_PAB
+		j endI_PAB
 #//                 }
 else_PAB:#//        else
 #//                 {
 #                      MergeCopy12(a4, a1, a2, used1, used2);
-			lw $a0, 16($fp) # Argument 1
-			lw $a1, 4($fp) # Argument 2
-			lw $a2, 8($fp) # Argument 3
-			lw $t3, 20($fp) # Argument 4
-			lw $t0, 24($fp)
-			sw $t0, 16($sp) # Argument 5 position
+		lw $a0, 16($fp)
+		lw $a1, 4($fp)
+		lw $a2, 8($fp)
+		lw $a3, 20($fp)
+		lw $t0, 24($fp)
+		sw $t0, 16($sp)
 
-			jal MergeCopy12
+		jal MergeCopy12
+
 #                      *used4Ptr = used1 + used2;
-			lw $t1, 32($fp) #used4Ptr
-			lw $t0, 20($fp) #used1
-			lw $t3, 24($fp) #used2
-#			sw $t4, 24($sp)
-#			sll $t4, $t4, 2
-#			add $t4, $t4, $t1
-			add $t0, $t0, $t3 #adding registers together
-			sw $t0, 0($t1) # place in the used4Ptr location
+		lw $t1, 32($fp)
+		lw $t0, 20($fp)
+		lw $v1, 24($fp)
+		add $t0, $t0, $v1
+
+		sw $t0, 0($t1)
 
 endI_PAB:#//        }
-			# EPILOG:\
-			lw $a0, 0($fp)
-			lw $a1, 4($fp)
-			lw $a2, 8($fp)
-			lw $a3, 12($fp)
+		lw $a0, 0($fp)
+		lw $a1, 4($fp)
+		lw $a2, 8($fp)
+		lw $a3, 12($fp)
 
-			sw $fp, 24($sp)
-			sw $ra, 28($sp)
-			addiu $fp, $sp, 31
+			# EPILOG:
+		lw $ra, 28($sp)
+		lw $fp, 24($sp)
+		addiu $sp, $sp, 32
 #                   return;
 #}
 #########################################
