@@ -909,7 +909,7 @@ ProcArraysA:
 #                   int* endPtr = a3 + used3;
 
 			# sw $t9, 24($fp) # sp vs fp
-			lw $t9, 24(fp)
+			lw $t9, 24($fp)
 			sll $t9, $t9, 2
 			add $t9, $t9, $a2 # Adding the registers together
 
@@ -1072,12 +1072,22 @@ else_PAB:#//        else
 
 			jal MergeCopy12
 #                      *used4Ptr = used1 + used2;
-			sw $t4, 24($sp)
-			sll $t4, $t4, 2
-			add $t4, $t4, $t1
+			lw $t1, 32($fp) #used4Ptr
+			lw $t0, 20($fp) #used1
+			lw $t3, 24($fp) #used2
+#			sw $t4, 24($sp)
+#			sll $t4, $t4, 2
+#			add $t4, $t4, $t1
+			add $t0, $t0, $t3 #adding registers together
+			sw $t0, 0($t1) # place in the used4Ptr location
 
 endI_PAB:#//        }
 			# EPILOG:\
+			lw $a0, 0($fp)
+			lw $a1, 4($fp)
+			lw $a2, 8($fp)
+			lw $a3, 12($fp)
+
 			sw $fp, 24($sp)
 			sw $ra, 28($sp)
 			addiu $fp, $sp, 31
