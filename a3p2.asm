@@ -1017,10 +1017,10 @@ ProcArraysB:
 			####################(46)####################
 
 			# PROLOG:
-			addiu $sp ,$sp, -31
+			addiu $sp ,$sp, -32
 			sw $ra, 28($sp)
 			sw $fp, 24($sp)
-			addiu $fp, $sp, 31
+			addiu $fp, $sp, 32
 
 			sw $a0, 0($fp)				# minInt as received saved in caller's frame
 			sw $a1, 4($fp)				# a1 as received saved in caller's frame
@@ -1041,18 +1041,21 @@ ProcArraysB:
 
 begI_PAB:#//        {
 #                      MergeCopy12(a3, a1, a2, used1, used2);
-			lw $a3, 12($fp)
-			lw $a1, 4($fp)
-			lw $a2, 8($fp)
-
-			lw $t1, 20($fp)
-			lw $t2, 24($fp)
+			lw $a0, 12($fp) #a3 in argument 1
+			lw $a1, 4($fp)  #a1 in argument 2
+			lw $a2, 8($fp)  #a2 in argument 3
+			lw $a3, 20($fp) #used1 in argument 4
+			lw $t0, 24($fp) #used2 in argument position 5 using fp
+			sw $t0, 16($fp)
 
 			jal MergeCopy12
 #                      *used3Ptr = used1 + used2;
-			sw $t3, 24($sp)
-			sll $t3, $t3, 2
-			add $t3, $t3, $t1
+
+			lw $t4, 28($fp) # Location of used3Ptr
+			lw $t0, 20($fp) # location of used1
+			lw $v1, 24($sp) # location of used2
+			add $t0, $t0, $v1 # adds the contents of used1 + used2
+			sw $t0, 0($t4) # Setting them equal to each other
 
 #                   goto endI_PAB;
 			j endI_PAB
@@ -1060,11 +1063,13 @@ begI_PAB:#//        {
 else_PAB:#//        else
 #//                 {
 #                      MergeCopy12(a4, a1, a2, used1, used2);
-			lw $t0, 16($fp)
-			lw $a1, 4($fp)
-			lw $a2, 8($fp)
-			lw $t1, 20($fp)
-			lw $t2, 24($fp)
+			lw $a0, 16($fp) # Argument 1
+			lw $a1, 4($fp) # Argument 2
+			lw $a2, 8($fp) # Argument 3
+			lw $t3, 20($fp) # Argument 4
+			lw $t0, 24($fp)
+			sw $t0, 16($sp) # Argument 5 position
+
 			jal MergeCopy12
 #                      *used4Ptr = used1 + used2;
 			sw $t4, 24($sp)
